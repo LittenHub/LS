@@ -4,6 +4,8 @@ local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local BlockEvent = ReplicatedStorage.TS.GeneratedNetworkRemotes:FindFirstChild("RE_4.6848415795802784e+76")
+
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
@@ -81,9 +83,13 @@ buttonCorner.CornerRadius = UDim.new(0, 5)
 buttonCorner.Parent = toggleButton
 
 local function executeSpam()
-    ReplicatedStorage.TouchTap:Fire()
+    for i = 1, 3 do
+        pcall(function()
+            BlockEvent:FireServer(2.933813859058389e+76)
+        end)
+        task.wait(0.000000000000000000000000000000000000000000000000001)
+    end
 end
-
 -- Function to start/stop spam
 local function toggleSpam()
     isSpamming = not isSpamming
