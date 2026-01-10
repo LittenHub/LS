@@ -1,3 +1,11 @@
+if game:GetService("Players").LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("SpamToggleGui") then
+    if connection then
+        connection:Disconnect()
+        connection = nil
+    end
+    game:GetService("Players").LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("SpamToggleGui"):Destroy()
+end
+
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
