@@ -31,7 +31,7 @@ screenGui.Parent = playerGui
 -- Create main frame
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 100, 0, 65)
+mainFrame.Size = UDim2.new(0, 100, 0, 70)
 mainFrame.Position = UDim2.new(0.5, -100, 0.5, -60)
 mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 mainFrame.BorderSizePixel = 0
