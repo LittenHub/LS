@@ -3,6 +3,7 @@ if game:GetService("Players").LocalPlayer:FindFirstChild("PlayerGui"):FindFirstC
         connection:Disconnect()
         connection = nil
     end
+    isSpamming = false
     game:GetService("Players").LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("SpamToggleGui"):Destroy()
 end
 
@@ -11,6 +12,49 @@ local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
+
+local dragging, dragStart, startPos
+
+local function MakeDraggable(DragPoint, MainDrag)
+	pcall(function()
+		local Dragging = false
+		local DragInput
+		local MousePos
+		local FramePos
+		
+		DragPoint.InputBegan:Connect(function(Input)
+			if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+				
+				Dragging = true
+				MousePos = Input.Position
+				FramePos = MainDrag.Position
+				
+				Input.Changed:Connect(function()
+					if Input.UserInputState == Enum.UserInputState.End then
+						Dragging = false
+					end
+				end)
+			end
+		end)
+		
+		DragPoint.InputChanged:Connect(function(Input)
+			if Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch then
+				DragInput = Input
+			end
+		end)
+		
+		UserInputService.InputChanged:Connect(function(Input)
+			if Input == DragInput and Dragging then
+				local Delta = Input.Position - MousePos
+
+				local newPos = UDim2.new(FramePos.X.Scale, FramePos.X.Offset + Delta.X, FramePos.Y.Scale, FramePos.Y.Offset + Delta.Y)
+			    
+				TweenService:Create(MainDrag, TweenInfo.new(0.1, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Position = newPos}):Play()
+			end
+		end)
+	end)
+end
 
 local BlockEvent = ReplicatedStorage.TS.GeneratedNetworkRemotes:FindFirstChild("RE_4.6848415795802784e+76")
 
@@ -134,57 +178,7 @@ end
 -- Button event
 toggleButton.MouseButton1Click:Connect(toggleSpam)
 
--- Dragging system (mobile compatible)
-local dragging = false
-local dragStart = nil
-local startPos = nil
-
-local function updateInput(input)
-    local delta = input.Position - dragStart
-    local position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-    
-    -- Limit within screen
-    local vpSize = workspace.CurrentCamera.ViewportSize
-    local frameSize = mainFrame.AbsoluteSize
-    
-    local maxX = vpSize.X - frameSize.X
-    local maxY = vpSize.Y - frameSize.Y
-    
-    local newX = math.clamp(position.X.Offset, 0, maxX)
-    local newY = math.clamp(position.Y.Offset, 0, maxY)
-    
-    mainFrame.Position = UDim2.new(0, newX, 0, newY)
-end
-
--- Drag events for PC
-titleBar.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragStart = input.Position
-        startPos = mainFrame.Position
-        
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragging = false
-            end
-        end)
-    end
-end)
-
-titleBar.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-        if dragging then
-            updateInput(input)
-        end
-    end
-end)
-
--- Drag events for Mobile
-UserInputService.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.Touch and dragging then
-        updateInput(input)
-    end
-end)
+MakeDraggable(titleBar, mainFrame)
 
 -- Add visual effects
 local function addHoverEffect(button)
@@ -224,7 +218,7 @@ local notifText = Instance.new("TextLabel")
 notifText.Size = UDim2.new(1, -20, 1, 0)
 notifText.Position = UDim2.new(0, 10, 0, 0)
 notifText.BackgroundTransparency = 1
-notifText.Text = "Spam Toggle loaded! Drag by the top bar.\nCurrent multiplier: " .. MULTIPLIER
+notifText.Text = "Spam Toggle loaded! Drag by the top bar.
 notifText.TextColor3 = Color3.fromRGB(255, 255, 255)
 notifText.TextScaled = true
 notifText.Font = Enum.Font.Gotham
