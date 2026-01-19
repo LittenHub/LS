@@ -1,3 +1,5 @@
+-- open source script
+
 if game:GetService("Players").LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("SpamToggleGui") then
     if connection then
         connection:Disconnect()
