@@ -147,6 +147,7 @@ local function executeSpam()
         task.wait(0.000000000000000000000000000000000000000000000000001)
     end
 end
+
 -- Function to start/stop spam
 local function toggleSpam()
     isSpamming = not isSpamming
@@ -201,41 +202,3 @@ local function addHoverEffect(button)
 end
 
 addHoverEffect(toggleButton)
-
--- Initial notification
-local notificationGui = Instance.new("ScreenGui")
-notificationGui.Name = "NotificationGui"
-notificationGui.ResetOnSpawn = false
-notificationGui.Parent = playerGui
-
-local notification = Instance.new("Frame")
-notification.Size = UDim2.new(0, 300, 0, 60)
-notification.Position = UDim2.new(0.5, -150, 0, -70)
-notification.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-notification.BorderSizePixel = 0
-notification.Parent = notificationGui
-
-local notifCorner = Instance.new("UICorner")
-notifCorner.CornerRadius = UDim.new(0, 10)
-notifCorner.Parent = notification
-
-local notifText = Instance.new("TextLabel")
-notifText.Size = UDim2.new(1, -20, 1, 0)
-notifText.Position = UDim2.new(0, 10, 0, 0)
-notifText.BackgroundTransparency = 1
-notifText.Text = "Spam Toggle loaded! Drag by the top bar.
-notifText.TextColor3 = Color3.fromRGB(255, 255, 255)
-notifText.TextScaled = true
-notifText.Font = Enum.Font.Gotham
-notifText.Parent = notification
-
--- Animate notification
-local slideIn = TweenService:Create(notification, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Position = UDim2.new(0.5, -150, 0, 20)})
-local slideOut = TweenService:Create(notification, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Position = UDim2.new(0.5, -150, 0, -70)})
-
-slideIn:Play()
-wait(5)
-slideOut:Play()
-slideOut.Completed:Connect(function()
-    notificationGui:Destroy()
-end)
