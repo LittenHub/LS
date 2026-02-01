@@ -18,8 +18,6 @@ local TweenService = game:GetService("TweenService")
 
 local Net = require(ReplicatedStorage.TS.Network.Network).Network
 
-local dragging, dragStart, startPos
-
 local function MakeDraggable(DragPoint, MainDrag)
 	pcall(function()
 		local Dragging = false
@@ -103,6 +101,7 @@ titleBar.Size = UDim2.new(1, 0, 0, 20)
 titleBar.Position = UDim2.new(0, 0, 0, 0)
 titleBar.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 titleBar.BorderSizePixel = 0
+titleBar.Active = true
 titleBar.Parent = mainFrame
 
 local titleCorner = Instance.new("UICorner")
