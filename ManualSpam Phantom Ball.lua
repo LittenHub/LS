@@ -16,6 +16,8 @@ local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
+local Net = require(ReplicatedStorage.TS.Network.Network).Network
+
 local dragging, dragStart, startPos
 
 local function MakeDraggable(DragPoint, MainDrag)
@@ -58,7 +60,7 @@ local function MakeDraggable(DragPoint, MainDrag)
 	end)
 end
 
-local BlockEvent = ReplicatedStorage.TS.GeneratedNetworkRemotes:FindFirstChild("RE_4.6848415795802784e+76")
+-- local BlockEvent = ReplicatedStorage.TS.GeneratedNetworkRemotes:FindFirstChild("RE_4.6848415795802784e+76")
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -139,7 +141,8 @@ buttonCorner.Parent = toggleButton
 local function executeSpam()
     for i = 1, 3 do
         pcall(function()
-            BlockEvent:FireServer(2.933813859058389e+76)
+			Net:CSendEvent(4.6848415795802784e76, 6.8467442838735085e75)
+            -- BlockEvent:FireServer(2.933813859058389e+76)
         end)
         task.wait(0.000000000000000000000000000000000000000000000000001)
     end
